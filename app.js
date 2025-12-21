@@ -1,8 +1,9 @@
-const cookieParser = require("cookie-parser")
 const express = require("express")
 const app = express()
 
 const path = require("path")
+const cookieParser = require("cookie-parser")
+const userModel = require("./models/user")
 
 app.set("view engine", "ejs")
 
@@ -13,7 +14,7 @@ app.use(cookieParser())
 
 
 app.get("/", (req, res) => {
-    res.send("Home")
+    res.render("index")
 })
 
 app.listen(3000)
