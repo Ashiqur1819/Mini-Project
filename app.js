@@ -55,5 +55,23 @@ app.post("/register", async(req, res) => {
 })
 
 
+app.post("/login", async(req, res) => {
+
+    const {email, password} = req.body
+
+    const user = await userModel.findOne({email})
+
+    if(!user) return res.status(500).send("Something went wrong!")
+
+    bcrypt.compare(password, user.password, function(err, result) {
+    if(result) return res.send("Login Successfull.")
+    res.send("Something went wrong!")
+});
+
+    
+    
+})
+
+
 
 app.listen(3000)
