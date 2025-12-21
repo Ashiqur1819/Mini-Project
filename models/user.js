@@ -7,7 +7,17 @@ const userSchema = mongoose.Schema({
     username: String,
     email: String,
     password: String,
-    age: Number
+    age: Number,
+    post: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "post"
+        }
+    ],
+    date: {
+        type: Date,
+        default: Date.now()
+    }
 })
 
 module.exports = mongoose.model("user", userSchema)
