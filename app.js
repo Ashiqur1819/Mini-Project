@@ -4,6 +4,7 @@ const app = express()
 const path = require("path")
 const cookieParser = require("cookie-parser")
 const userModel = require("./models/user")
+const postModel = require("./models/post")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 
@@ -27,7 +28,7 @@ const isLoggedIn  = (req, res, next) => {
             if(err){
                 res.send("Invalid Token")
             }else{
-                res.user = decoded
+                req.user = decoded
                 next()
             }
 });
@@ -66,7 +67,7 @@ app.post("/register", async(req, res) => {
     const token = jwt.sign({username, email}, "Nusrat")
     res.cookie("token", token)
 
-    res.send("Registration Success!")
+    res.redirect("/profile")
 
     });
     })
@@ -105,12 +106,28 @@ app.get("/logout", (req, res) => {
 
 app.get("/profile", isLoggedIn, async (req, res) => {
 
-    const user = await res.user
-
+    const user = await userModel.findOne({email: req.user.email}).populate("posts")
     console.log(user)
+
     res.render("profile", {user})
 })
 
+app.post("/post", isLoggedIn, async(req, res) => {
+    const user = await userModel.findOne({email : req.user.email})
+
+    const {content} = req.body
+
+    const post = await postModel.create({
+        user: user._id,
+        content
+    })
+
+    user.posts.push(post._id)
+    await user.save()
+    
+    res.redirect("/profile")
+
+})
 
 
 app.listen(3000)
