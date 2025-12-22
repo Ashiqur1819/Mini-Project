@@ -15,6 +15,26 @@ app.use(express.static(path.join(__dirname, "public")))
 app.use(cookieParser())
 
 
+// Middlewares
+
+const isLoggedIn  = (req, res, next) => {
+
+    if(req.cookies.token === ""){
+        res.send("You must be loggedin!")
+    }
+    else{
+        jwt.verify(req.cookies.token, 'Nusrat', function(err, decoded) {
+            if(err){
+                res.send("Invalid Token")
+            }else{
+                res.user = decoded
+                next()
+            }
+});
+    }
+}
+
+
 app.get("/", (req, res) => {
     res.render("index")
 })
@@ -64,12 +84,27 @@ app.post("/login", async(req, res) => {
     if(!user) return res.status(500).send("Something went wrong!")
 
     bcrypt.compare(password, user.password, function(err, result) {
-    if(result) return res.send("Login Successfull.")
-    res.send("Something went wrong!")
+    if(result){
+        const token = jwt.sign({username: user.username, email: user.email}, "Nusrat")
+    res.cookie("token", token)
+        res.send("Login Successfull.")
+    }
+    else
+        res.send("Something went wrong!")
 });
 
     
     
+})
+
+app.get("/logout", (req, res) => {
+    res.cookie("token", "")
+    res.redirect("/login")
+})
+
+
+app.get("/profile", isLoggedIn, (req, res) => {
+    res.send("This is profile page")
 })
 
 
