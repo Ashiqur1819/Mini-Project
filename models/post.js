@@ -12,6 +12,7 @@ const postSchema = mongoose.Schema({
     default: Date.now(),
   },
   content: String,
+  likes: []
 });
 
 module.exports = mongoose.model("post", postSchema);

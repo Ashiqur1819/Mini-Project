@@ -107,7 +107,6 @@ app.get("/logout", (req, res) => {
 app.get("/profile", isLoggedIn, async (req, res) => {
 
     const user = await userModel.findOne({email: req.user.email}).populate("posts")
-    console.log(user)
 
     res.render("profile", {user})
 })
@@ -126,6 +125,24 @@ app.post("/post", isLoggedIn, async(req, res) => {
     await user.save()
     
     res.redirect("/profile")
+
+})
+
+app.get("/like/:id", isLoggedIn, async(req, res) => {
+
+    const user = await userModel.findOne({email: req.user.email})
+
+    const post = await postModel.findOne({_id : req.params.id}).populate("user")
+
+    if(post.likes.indexOf(user._id) === -1){
+            post.likes.push(user._id)
+    }else{
+        post.likes.splice(post.likes.indexOf(user._id), 1)
+    }
+
+    await post.save()
+    res.redirect("/profile")
+
 
 })
 

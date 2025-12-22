@@ -51,8 +51,9 @@
     <p class="text-zinc-300">
       <%= post.content %>
     </p>
+    <p class="mt-2"><%= post.likes.length %> likes</p>
     <div class="mt-6 flex gap-6">
-      <a href="" class="text-orange-500">Like</a>
+      <a href="/like/<%= post._id %>" class="text-orange-500"><%= post.likes.indexOf(user._id) === -1 ? "Like" : "Unlike" %></a>
       <a href="" class="text-sky-500">Edit</a>
     </div>
   </div>
