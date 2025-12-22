@@ -20,7 +20,7 @@ app.use(cookieParser())
 const isLoggedIn  = (req, res, next) => {
 
     if(req.cookies.token === ""){
-        res.send("You must be loggedin!")
+        res.redirect("/login")
     }
     else{
         jwt.verify(req.cookies.token, 'Nusrat', function(err, decoded) {
@@ -87,7 +87,7 @@ app.post("/login", async(req, res) => {
     if(result){
         const token = jwt.sign({username: user.username, email: user.email}, "Nusrat")
     res.cookie("token", token)
-        res.send("Login Successfull.")
+        res.redirect("/profile")
     }
     else
         res.send("Something went wrong!")
@@ -103,8 +103,12 @@ app.get("/logout", (req, res) => {
 })
 
 
-app.get("/profile", isLoggedIn, (req, res) => {
-    res.send("This is profile page")
+app.get("/profile", isLoggedIn, async (req, res) => {
+
+    const user = await res.user
+
+    console.log(user)
+    res.render("profile", {user})
 })
 
 

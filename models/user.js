@@ -1,23 +1,23 @@
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
 
-mongoose.connect("mongodb://localhost:27017/miniProjectDB")
+mongoose.connect("mongodb://localhost:27017/miniProjectDB");
 
 const userSchema = mongoose.Schema({
-    name: String,
-    username: String,
-    email: String,
-    password: String,
-    age: Number,
-    post: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "post"
-        }
-    ],
-    date: {
-        type: Date,
-        default: Date.now()
-    }
-})
+  name: String,
+  username: String,
+  email: String,
+  password: String,
+  age: Number,
+  post: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "post",
+    },
+  ],
+  date: {
+    type: Date,
+    default: Date.now(),
+  },
+});
 
-module.exports = mongoose.model("user", userSchema)
+module.exports = mongoose.model("user", userSchema);
