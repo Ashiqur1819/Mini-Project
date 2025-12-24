@@ -7,6 +7,7 @@ const userModel = require("./models/user")
 const postModel = require("./models/post")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
+const upload  = require("./config/multer.config")
 
 app.set("view engine", "ejs")
 
@@ -144,6 +145,17 @@ app.get("/like/:id", isLoggedIn, async(req, res) => {
     res.redirect("/profile")
 
 
+})
+
+app.get("/profile/upload", (req, res) => {
+    res.render("profileUpload")
+})
+
+app.post("/upload", upload.single('profilePic'), isLoggedIn, async(req, res) => {
+    const user = await userModel.findOne({email : req.user.email})
+    user.profilePic = req.file.filename
+    await user.save()
+    res.redirect("/profile")
 })
 
 
