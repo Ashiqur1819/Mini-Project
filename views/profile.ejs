@@ -19,15 +19,16 @@
         <div class="mb-6">
           <div class="flex gap-3 mb-6">
             <div class="h-10 w-10 rounded-md overflow-hidden">
-<img 
-  class="h-full w-full object-cover"
-  src="<%= user.profilePic ? '/images/uploads/' + user.profilePic : '/images/uploads/default.avif' %>"
-  alt=""
->
-          </div>
-          <h2 class="text-3xl mb-1">
-            Welcome <span class="text-orange-500"><%= user.username %></span> 👋
-          </h2>
+              <img
+                class="h-full w-full object-cover"
+                src="<%= user.profilePic ? '/images/uploads/' + user.profilePic : '/images/uploads/default.avif' %>"
+                alt=""
+              />
+            </div>
+            <h2 class="text-3xl mb-1">
+              Welcome
+              <span class="text-orange-500"><%= user.username %></span> 👋
+            </h2>
           </div>
           <p class="text-zinc-200">Now, You can create a post.</p>
         </div>
